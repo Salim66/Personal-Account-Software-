@@ -41,8 +41,8 @@
             </a>
         </li>
 
-        <li class="">
-            <a style="margin-left: 10px; font-size: 16px;" href="pages/auth_login.html">
+        <li class="{{ ($route == 'add.daily.expense') ? 'active' : '' }}">
+            <a style="margin-left: 10px; font-size: 16px;" href="{{ route('add.daily.expense') }}">
                 <i class="fa-solid fa-circle-minus"></i>
               <span style="margin-left: 5px">Daily Expense</span>
             </a>

@@ -272,10 +272,80 @@ function investment_load_data( from_date = '', to_date = '', business_id = '' ) 
                 data: 'action',
                 name: 'action'
             }
-        ]
+        ],
+        drawCallback:function(data){
+            let total = 0;
+            data.aoData.map(data => {
+                total = Number(total) + Number(data._aData.amount);
+            });
+            $('.total_investment').html(total);
+        }
     });
 
 }
+
+
+//////////////////Daily Expense Data Load By Yajra Table ///////////////////
+daily_expense_load_data();
+function daily_expense_load_data( from_date = '', to_date = '', business_id = '' ) {
+    // alert(business_id);
+    $('#daily_expense').DataTable({
+        processing: true,
+        serverSide: true,
+        scrollX: true,
+        // rowReorder: {
+        //     selector: 'td:nth-child(2)'
+        // },
+        responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        ajax: {
+            url: '/add-dailey-expense',
+            data: {from_date:from_date, to_date:to_date, business_id:business_id}
+        },
+        columns: [
+            {
+                data: 'id',
+                name: 'id'
+            },
+            {
+                data: 'business.name',
+                name: 'business.name'
+            },
+            {
+                data: 'created_at',
+                name: 'created_at',
+                render: function (data, type, full, meta) {
+                    let date = new Date(data);
+                    return date.toLocaleDateString();
+                }
+            },
+            {
+                data: 'remark',
+                name: 'remark'
+            },
+            {
+                data: 'amount',
+                name: 'amount'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            }
+        ],
+        drawCallback:function(data){
+            let total = 0;
+            data.aoData.map(data => {
+                total = Number(total) + Number(data._aData.amount);
+            });
+            $('.total_daily_expense').html(total);
+        }
+    });
+
+}
+
 
 
 
@@ -291,7 +361,9 @@ $('#filter').click(function(e){
     if( business_id != null && business_id != ''){
 
         $('#investment').DataTable().destroy();
+        $('#daily_expense').DataTable().destroy();
         investment_load_data(from_date, to_date, business_id);
+        daily_expense_load_data(from_date, to_date, business_id);
 
         return false;
     }
@@ -299,7 +371,9 @@ $('#filter').click(function(e){
     if(from_date != '' &&  to_date != '')
     {
         $('#investment').DataTable().destroy();
+        $('#daily_expense').DataTable().destroy();
         investment_load_data(from_date, to_date);
+        daily_expense_load_data(from_date, to_date);
 
     }
 
@@ -340,6 +414,54 @@ $(document).on('click', '.edit_investment_data', function(e){
 
 });
 
+//Investment Data Edit
+$(document).on('click', '.edit_investment_data', function(e){
+    e.preventDefault();
+    let id = $(this).attr('edit_id');
+
+    $.ajax({
+        method:"GET",
+        url: '/edit-main-investment/' + id,
+        success: function(data){
+            // console.log(data.business);
+
+            $('.e_investment_name').html(data.business);
+            $('.e_investment_remark').val(data.remark);
+            $('.e_investment_amount').val(data.amount);
+            $('.e_investment_id').val(data.id);
+
+
+            $('.investment_edit').modal('show');
+
+        }
+    });
+
+});
+
+//Daily Expense Data Edit
+$(document).on('click', '.edit_daily_expense_data', function(e){
+    e.preventDefault();
+    let id = $(this).attr('edit_id');
+
+    $.ajax({
+        method:"GET",
+        url: '/edit-dailey-expense/' + id,
+        success: function(data){
+            // console.log(data.business);
+
+            $('.d_expense_name').html(data.business);
+            $('.d_expense_remark').val(data.remark);
+            $('.d_expense_amount').val(data.amount);
+            $('.d_expense_id').val(data.id);
+
+
+            $('.dialy_expense_edit').modal('show');
+
+        }
+    });
+
+});
+
 
 // Investment Data Update
 $(document).on('submit', '#edit_investment_form', function(e){
@@ -360,6 +482,31 @@ $(document).on('submit', '#edit_investment_form', function(e){
             $('#edit_investment_form')[0].reset();
             $('.investment_edit').modal('hide');
             $('#investment').DataTable().ajax.reload();
+        }
+    });
+
+});
+
+
+// Daily Expense Data Update
+$(document).on('submit', '#edit_dialy_expense_form', function(e){
+    e.preventDefault();
+
+    $.ajax({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
+                "content"
+            ),
+        },
+        method:"POST",
+        url: '/update-dailey-expense',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        success: function(data){
+            $('#edit_dialy_expense_form')[0].reset();
+            $('.dialy_expense_edit').modal('hide');
+            $('#daily_expense').DataTable().ajax.reload();
         }
     });
 
@@ -393,6 +540,50 @@ $(document).on('submit', '#edit_investment_form', function(e){
                 success: function (data) {
 
                     $('#investment').DataTable().ajax.reload();
+
+                }
+            });
+
+            Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+            )
+        }
+      })
+
+
+
+});
+
+ // delete Daily Expense form
+ $(document).on('submit', '.daily_expense_delete_form', function (e) {
+    e.preventDefault();
+    let id = $(this).attr('delete_id');
+    // alert(id);
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Delete this data!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
+                        "content"
+                    ),
+                },
+                url: '/delete-dailey-expense',
+                method: 'POST',
+                data: { id: id },
+                success: function (data) {
+
+                    $('#daily_expense').DataTable().ajax.reload();
 
                 }
             });

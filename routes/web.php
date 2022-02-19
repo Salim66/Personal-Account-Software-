@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\DailyExpenseController;
 use App\Http\Controllers\MainInvestmentController;
+use App\Models\DailyExpense;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,3 +42,10 @@ Route::post('/store-main-investment', [MainInvestmentController::class, 'investm
 Route::get('/edit-main-investment/{id}', [MainInvestmentController::class, 'investmentEdit'])->name('investment.edit');
 Route::post('/update-main-investment', [MainInvestmentController::class, 'investmentUpdate'])->name('investment.update');
 Route::post('/delete-main-investment', [MainInvestmentController::class, 'investmentDelete'])->name('investment.delete');
+
+// Daily Expense All Routes
+Route::get('/add-dailey-expense', [DailyExpenseController::class, 'addDailyExpensePage'])->name('add.daily.expense');
+Route::post('/store-dailey-expense', [DailyExpenseController::class, 'expenseStore'])->name('investment.store');
+Route::get('/edit-dailey-expense/{id}', [DailyExpenseController::class, 'expenseEdit'])->name('investment.edit');
+Route::post('/update-dailey-expense', [DailyExpenseController::class, 'expenseUpdate'])->name('expense.update');
+Route::post('/delete-dailey-expense', [DailyExpenseController::class, 'expenseDelete'])->name('expense.delete');
