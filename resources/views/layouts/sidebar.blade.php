@@ -48,8 +48,8 @@
             </a>
         </li>
 
-        <li class="">
-            <a style="margin-left: 10px; font-size: 16px;" href="pages/auth_login.html">
+        <li class="{{ ($route == 'add.daily.income') ? 'active' : '' }}">
+            <a style="margin-left: 10px; font-size: 16px;" href="{{ route('add.daily.income') }}">
                 <i class="fa-solid fa-circle-plus"></i>
               <span style="margin-left: 5px">Daily Income</span>
             </a>

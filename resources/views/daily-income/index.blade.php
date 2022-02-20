@@ -6,12 +6,12 @@
 	<div class="content-header">
 		<div class="d-flex align-items-center">
 			<div class="mr-auto">
-				<h3 class="page-title">Daily Expense</h3>
+				<h3 class="page-title">Daily Income</h3>
 				<div class="d-inline-block align-items-center">
 					<nav>
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a></li>
-							<li class="breadcrumb-item active" aria-current="page">Add Daily Expense</li>
+							<li class="breadcrumb-item active" aria-current="page">Add Daily Income</li>
 						</ol>
 					</nav>
 				</div>
@@ -33,7 +33,7 @@
            <div class="box-body">
              <div class="row">
                <div class="col">
-                   <form action="{{ route('expense.store') }}" method="POST" novalidate>
+                   <form action="{{ route('income.store') }}" method="POST" novalidate>
                     @csrf
                      <div class="row">
                        <div class="col-12">
@@ -85,7 +85,7 @@
 
             <div class="box">
               <div class="box-header with-border">
-                <h3 class="box-title">All Daily Expense List</h3>
+                <h3 class="box-title">All Daily Income List</h3>
               </div>
               <!-- /.box-header -->
               <div class="container">
@@ -137,7 +137,7 @@
               </div>
               <div class="box-body">
                   <div class="table-responsive">
-                    <table id="daily_expense" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                    <table id="daily_income" class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
                       <thead>
                           <tr>
                               <th>#</th>
@@ -153,7 +153,7 @@
                       <tfoot>
 						<tr>
                             <th rowspan="1" colspan="5" style="text-align: right; font-weight: bold;">Total Amount</th>
-                            <th rowspan="1" colspan="1" style="text-align: left; font-weight: bold;" class="total_daily_expense"></th>
+                            <th rowspan="1" colspan="1" style="text-align: left; font-weight: bold;" class="total_daily_income"></th>
                         </tr>
 					  </tfoot>
                   </table>
@@ -173,30 +173,30 @@
 </div>
 
  <!-- Modal -->
- <div class="modal center-modal fade dialy_expense_edit" id="modal-center" tabindex="-1">
+ <div class="modal center-modal fade dialy_income_edit" id="modal-center" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Edit Daily Expense</h5>
+          <h5 class="modal-title">Edit Daily Income</h5>
         </div>
-        <form method="POST" id="edit_dialy_expense_form">
+        <form method="POST" id="edit_dialy_income_form">
             <div class="modal-body">
 
                     <div class="form-group">
-                        <select name="business_id" class="form-control d_expense_name">
+                        <select name="business_id" class="form-control d_income_name">
 
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="">Amount</label>
-                        <input type="number" name="amount" class="form-control d_expense_amount">
+                        <input type="number" name="amount" class="form-control d_income_amount">
                     </div>
 
                     <div class="form-group">
                         <label for="">Remark</label>
-                        <input type="text" name="remark" class="form-control d_expense_remark">
-                        <input type="hidden" name="id" class="form-control d_expense_id">
+                        <input type="text" name="remark" class="form-control d_income_remark">
+                        <input type="hidden" name="id" class="form-control d_income_id">
                     </div>
 
             </div>

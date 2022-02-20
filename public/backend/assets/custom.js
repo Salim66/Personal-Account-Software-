@@ -347,9 +347,71 @@ function daily_expense_load_data( from_date = '', to_date = '', business_id = ''
 }
 
 
+//////////////////Daily Income Data Load By Yajra Table ///////////////////
+daily_income_load_data();
+function daily_income_load_data( from_date = '', to_date = '', business_id = '' ) {
+    // alert(business_id);
+    $('#daily_income').DataTable({
+        processing: true,
+        serverSide: true,
+        scrollX: true,
+        // rowReorder: {
+        //     selector: 'td:nth-child(2)'
+        // },
+        responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        ajax: {
+            url: '/add-dailey-income',
+            data: {from_date:from_date, to_date:to_date, business_id:business_id}
+        },
+        columns: [
+            {
+                data: 'id',
+                name: 'id'
+            },
+            {
+                data: 'business.name',
+                name: 'business.name'
+            },
+            {
+                data: 'created_at',
+                name: 'created_at',
+                render: function (data, type, full, meta) {
+                    let date = new Date(data);
+                    return date.toLocaleDateString();
+                }
+            },
+            {
+                data: 'remark',
+                name: 'remark'
+            },
+            {
+                data: 'amount',
+                name: 'amount'
+            },
+            {
+                data: 'action',
+                name: 'action'
+            }
+        ],
+        drawCallback:function(data){
+            let total = 0;
+            data.aoData.map(data => {
+                total = Number(total) + Number(data._aData.amount);
+            });
+            $('.total_daily_income').html(total);
+        }
+    });
+
+}
 
 
-// Investment filter
+
+
+// Data filter
 $('#filter').click(function(e){
     e.preventDefault();
     let from_date = moment($('#from_data').val()).format('YYYY-MM-DD');
@@ -362,8 +424,10 @@ $('#filter').click(function(e){
 
         $('#investment').DataTable().destroy();
         $('#daily_expense').DataTable().destroy();
+        $('#daily_income').DataTable().destroy();
         investment_load_data(from_date, to_date, business_id);
         daily_expense_load_data(from_date, to_date, business_id);
+        daily_income_load_data(from_date, to_date, business_id);
 
         return false;
     }
@@ -372,47 +436,53 @@ $('#filter').click(function(e){
     {
         $('#investment').DataTable().destroy();
         $('#daily_expense').DataTable().destroy();
+        $('#daily_income').DataTable().destroy();
         investment_load_data(from_date, to_date);
         daily_expense_load_data(from_date, to_date);
+        daily_income_load_data(from_date, to_date);
 
     }
 
 
 });
 
-// Investment refresh
+// Data refresh
 $('#refresh').click(function(){
     $('#from_data').val('');
     $('#to_data').val('');
     $('#investment').DataTable().destroy();
+    $('#daily_expense').DataTable().destroy();
+    $('#daily_income').DataTable().destroy();
     investment_load_data();
+    daily_expense_load_data();
+    daily_income_load_data();
 });
 
 
 
-//Investment Data Edit
-$(document).on('click', '.edit_investment_data', function(e){
-    e.preventDefault();
-    let id = $(this).attr('edit_id');
+// //Investment Data Edit
+// $(document).on('click', '.edit_investment_data', function(e){
+//     e.preventDefault();
+//     let id = $(this).attr('edit_id');
 
-    $.ajax({
-        method:"GET",
-        url: '/edit-main-investment/' + id,
-        success: function(data){
-            // console.log(data.business);
+//     $.ajax({
+//         method:"GET",
+//         url: '/edit-main-investment/' + id,
+//         success: function(data){
+//             // console.log(data.business);
 
-            $('.e_investment_name').html(data.business);
-            $('.e_investment_remark').val(data.remark);
-            $('.e_investment_amount').val(data.amount);
-            $('.e_investment_id').val(data.id);
+//             $('.e_investment_name').html(data.business);
+//             $('.e_investment_remark').val(data.remark);
+//             $('.e_investment_amount').val(data.amount);
+//             $('.e_investment_id').val(data.id);
 
 
-            $('.investment_edit').modal('show');
+//             $('.investment_edit').modal('show');
 
-        }
-    });
+//         }
+//     });
 
-});
+// });
 
 //Investment Data Edit
 $(document).on('click', '.edit_investment_data', function(e){
@@ -456,6 +526,30 @@ $(document).on('click', '.edit_daily_expense_data', function(e){
 
 
             $('.dialy_expense_edit').modal('show');
+
+        }
+    });
+
+});
+
+//Daily Income Data Edit
+$(document).on('click', '.edit_daily_income_data', function(e){
+    e.preventDefault();
+    let id = $(this).attr('edit_id');
+
+    $.ajax({
+        method:"GET",
+        url: '/edit-dailey-income/' + id,
+        success: function(data){
+            // console.log(data.business);
+
+            $('.d_income_name').html(data.business);
+            $('.d_income_remark').val(data.remark);
+            $('.d_income_amount').val(data.amount);
+            $('.d_income_id').val(data.id);
+
+
+            $('.dialy_income_edit').modal('show');
 
         }
     });
@@ -507,6 +601,31 @@ $(document).on('submit', '#edit_dialy_expense_form', function(e){
             $('#edit_dialy_expense_form')[0].reset();
             $('.dialy_expense_edit').modal('hide');
             $('#daily_expense').DataTable().ajax.reload();
+        }
+    });
+
+});
+
+
+// Daily Income Data Update
+$(document).on('submit', '#edit_dialy_income_form', function(e){
+    e.preventDefault();
+
+    $.ajax({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
+                "content"
+            ),
+        },
+        method:"POST",
+        url: '/update-dailey-income',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        success: function(data){
+            $('#edit_dialy_income_form')[0].reset();
+            $('.dialy_income_edit').modal('hide');
+            $('#daily_income').DataTable().ajax.reload();
         }
     });
 
@@ -584,6 +703,51 @@ $(document).on('submit', '#edit_dialy_expense_form', function(e){
                 success: function (data) {
 
                     $('#daily_expense').DataTable().ajax.reload();
+
+                }
+            });
+
+            Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+            )
+        }
+      })
+
+
+
+});
+
+
+ // delete Daily Income form
+ $(document).on('submit', '.daily_income_delete_form', function (e) {
+    e.preventDefault();
+    let id = $(this).attr('delete_id');
+    // alert(id);
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Delete this data!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
+                        "content"
+                    ),
+                },
+                url: '/delete-dailey-income',
+                method: 'POST',
+                data: { id: id },
+                success: function (data) {
+
+                    $('#daily_income').DataTable().ajax.reload();
 
                 }
             });
