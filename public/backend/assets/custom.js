@@ -274,6 +274,7 @@ function investment_load_data( from_date = '', to_date = '', business_id = '' ) 
             }
         ],
         drawCallback:function(data){
+            // console.log(data);
             let total = 0;
             data.aoData.map(data => {
                 total = Number(total) + Number(data._aData.amount);
@@ -398,6 +399,7 @@ function daily_income_load_data( from_date = '', to_date = '', business_id = '' 
             }
         ],
         drawCallback:function(data){
+
             let total = 0;
             data.aoData.map(data => {
                 total = Number(total) + Number(data._aData.amount);
@@ -771,3 +773,91 @@ $( function() {
     $( "#to_data" ).datepicker();
 
 } );
+
+
+
+//////////////////// Report ////////////////////
+function report_load_data( from_date = '', to_date = '', business_id = '' ){
+
+    // console.log(from_date + ' ' + to_date + ' ' + business_id);
+
+    $.ajax({
+        url: '/search-reaport',
+        data: {from_date:from_date, to_date:to_date, business_id:business_id},
+        type: 'GET',
+        success: function (data) {
+            // console.log(data);
+            $('.main_investment_report').html(data.main_investment);
+            $('.daily_expense_report').html(data.daily_expense);
+            $('.total_expense_report').html(data.total_expense);
+            $('.income_report').html(data.daily_income);
+            $('.profit_report').html(data.profit);
+        }
+    });
+
+}
+
+// Report Data filter
+$('#filter_report').click(function(e){
+    e.preventDefault();
+    let from_date = moment($('#from_data').val()).format('YYYY-MM-DD');
+    let to_date =  moment($('#to_data').val()).format('YYYY-MM-DD');
+    let business_id = $('#business_id').val();
+    // alert(business_id);
+    // alert(from_date + ' ' + to_date);
+
+    if( business_id != null && business_id != '' && from_date == '' &&  to_date == ''){
+
+        report_load_data(from_date = '', to_date = '', business_id);
+
+        return false;
+    }
+
+    if( business_id != null && business_id != '' && from_date != '' &&  to_date != '' ){
+
+        report_load_data(from_date, to_date, business_id);
+
+        return false;
+    }
+
+    if(from_date != '' &&  to_date != '')
+    {
+
+        report_load_data(from_date, to_date);
+
+        return false;
+    }
+
+
+});
+
+// Report Data refresh
+$('#refresh_report').click(function(){
+    $('#from_data').val('');
+    $('#to_data').val('');
+    report_load_data();
+});
+
+
+
+
+//////////////////// Total Overview ////////////////////
+total_overview_load_data();
+function total_overview_load_data(){
+
+    // console.log(from_date + ' ' + to_date + ' ' + business_id);
+
+    $.ajax({
+        url: '/search-total-overview',
+        type: 'GET',
+        success: function (data) {
+            // console.log(data);
+            $('.overview_investment').html(data.main_investment);
+            $('.overview_daily_expense').html(data.daily_expense);
+            $('.overview_total_expense').html(data.total_expense);
+            $('.overview_total_income').html(data.daily_income);
+            $('.overview_profit').html(data.profit);
+        }
+    });
+
+}

@@ -15,6 +15,20 @@ class DailyIncomeController extends Controller
 
         if( request() -> ajax() ){
 
+
+            // when two date is empty and  business id has this purson is run
+            if( !empty( $request->business_id ) && $request->from_date == "Invalid date" ){
+
+                return datatables()->of( DailyIncome::with( 'business' )->where('business_id', $request->business_id)->latest()->get() )->addColumn( 'action', function ( $data ) {
+                    $output = '<a title="Edit" edit_id="' . $data['id'] . '" href="#" class="btn btn-sm btn-outline-info edit_daily_income_data" style="margin-right: 10px;"><i class="fa fa-edit text-white"></i></a>';
+
+                    $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="daily_income_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
+                    $data['id'] . '"><button type="submit" class="btn btn-sm ml-1 btn-outline-danger" ><i class="fa fa-trash"></i></button></form>';
+                    return $output;
+                } )->rawColumns( ['action'] )->make( true );
+
+            }
+
             // when two date has and  business id is empty this purson is run
              if ( !empty( $request->from_date ) && !empty( $request->to_date && empty( $request->business_id ) ) ) {
 
@@ -37,19 +51,6 @@ class DailyIncomeController extends Controller
                         $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="daily_income_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
                         $data['id'] . '"><button type="submit" class="btn btn-sm ml-1 btn-outline-danger" ><i class="fa fa-trash"></i></button></form>';
                         return $output;
-                } )->rawColumns( ['action'] )->make( true );
-
-            }
-
-            // when two date is empty and  business id has this purson is run
-            if( !empty( $request->business_id ) && empty( $request->from_date ) && empty( $request->to_date )){
-
-                return datatables()->of( DailyIncome::with( 'business' )->where('business_id', $request->business_id)->latest()->get() )->addColumn( 'action', function ( $data ) {
-                    $output = '<a title="Edit" edit_id="' . $data['id'] . '" href="#" class="btn btn-sm btn-outline-info edit_daily_income_data" style="margin-right: 10px;"><i class="fa fa-edit text-white"></i></a>';
-
-                    $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="daily_income_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
-                    $data['id'] . '"><button type="submit" class="btn btn-sm ml-1 btn-outline-danger" ><i class="fa fa-trash"></i></button></form>';
-                    return $output;
                 } )->rawColumns( ['action'] )->make( true );
 
             }

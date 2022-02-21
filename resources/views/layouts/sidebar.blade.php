@@ -17,7 +17,7 @@
             </span>
           </a>
 		  <ul class="treeview-menu">
-            <li><a href="javascript:void()"><i class="fa fa-user mr-5"></i>My Profile </a></li>
+            <li><a href="{{ route('profile.show') }}"><i class="fa fa-user mr-5"></i>My Profile </a></li>
 			<li><a href="{{ route('admin.logout') }}"><i class="fa fa-power-off mr-5"></i>Logout</a></li>
           </ul>
         </li>
@@ -55,8 +55,8 @@
             </a>
         </li>
 
-        <li class="">
-            <a style="margin-left: 10px; font-size: 16px;" href="pages/auth_login.html">
+        <li class="{{ ($route == 'report.page') ? 'active' : '' }}">
+            <a style="margin-left: 10px; font-size: 16px;" href="{{ route('report.page') }}">
                 <i class="fa-solid fa-file-lines"></i>
               <span style="margin-left: 5px">Report</span>
             </a>

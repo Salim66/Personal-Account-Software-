@@ -41,10 +41,10 @@
               </li>
               <!-- Menu Body -->
               <li class="user-body">
-				    <a class="dropdown-item" href="javascript:void(0)"><i class="ion ion-person"></i> My Profile</a>
+				    <a class="dropdown-item" href="{{ route('profile.show') }}"><i class="ion ion-person"></i> My Profile</a>
 					<a class="dropdown-item" href="{{ route('admin.logout') }}"><i class="ion-log-out"></i> Logout</a>
 					<div class="dropdown-divider"></div>
-					<div class="p-10"><a href="javascript:void(0)" class="btn btn-sm btn-rounded btn-success">View Profile</a></div>
+					<div class="p-10"><a href="{{ route('profile.show') }}" class="btn btn-sm btn-rounded btn-success">View Profile</a></div>
               </li>
             </ul>
           </li>

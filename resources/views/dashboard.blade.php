@@ -30,7 +30,7 @@
 					  <h6 class="mb-30">
 						<span class="text-uppercase">Main Investment</span>
 					  </h6>
-					  <p class="font-size-26">$845,1258</p>
+					  <p class="font-size-26"><span class="overview_investment"></span> TK</p>
 					</div>
 				</div>
 				<div class="col-md-3 col-12">
@@ -38,7 +38,7 @@
 					  <h6 class="mb-30">
 						<span class="text-uppercase">Daily Total Expense</span>
 					  </h6>
-					  <p class="font-size-26">$845,1258</p>
+					  <p class="font-size-26"><span class="overview_daily_expense"></span> TK</p>
 					</div>
 				</div>
 				<div class="col-md-3 col-12">
@@ -46,7 +46,7 @@
 					  <h6 class="mb-30">
 						<span class="text-uppercase">Total Expense</span>
 					  </h6>
-					  <p class="font-size-26">$845,1258</p>
+					  <p class="font-size-26"><span class="overview_total_expense"></span> TK</p>
 					</div>
 				</div>
 				<div class="col-md-3 col-12">
@@ -54,7 +54,7 @@
 					  <h6 class="mb-30">
 						<span class="text-uppercase">Total Income</span>
 					  </h6>
-					  <p class="font-size-26">$845,1258</p>
+					  <p class="font-size-26"><span class="overview_total_income"></span> TK</p>
 					</div>
 				</div>
 				<div class="col-md-3 col-12">
@@ -62,7 +62,7 @@
 					  <h6 class="mb-30">
 						<span class="text-uppercase">Profit</span>
 					  </h6>
-					  <p class="font-size-26">$845,1258</p>
+					  <p class="font-size-26"><span class="overview_profit"></span> TK</p>
 					</div>
 				</div>
 
