@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('daily_expenses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('business_id');
+            $table->unsignedBigInteger('person_id');
             $table->string('amount');
             $table->string('remark');
             $table->timestamps();

@@ -12,7 +12,10 @@ class DailyExpense extends Model
     protected $guarded = [];
 
     public function business(){
-        return $this->belongsTo(Business::class, 'business_id');
+        return $this->belongsTo(Business::class);
     }
 
+    public function person(){
+        return $this->belongsTo(Person::class);
+    }
 }

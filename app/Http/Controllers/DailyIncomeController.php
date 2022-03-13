@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Business;
+use App\Models\Person;
 use App\Models\DailyIncome;
 use Illuminate\Http\Request;
 
@@ -82,13 +83,16 @@ class DailyIncomeController extends Controller
         $this->validate($request, [
             'business_id' => 'required',
             'amount' => 'required',
-            'remark' => 'required'
+            'remark' => 'required',
+            'date' => 'required',
         ]);
 
         DailyIncome::create([
             'business_id' => $request->business_id,
+            'person_id' => $request->person_id,
             'amount' => $request->amount,
             'remark' => $request->remark,
+            'date' => $request->date,
         ]);
 
         $notification = [
@@ -106,7 +110,7 @@ class DailyIncomeController extends Controller
         $data = DailyIncome::findOrFail($id);
 
 
-        // //All investment
+        // //All investment Business
         $businesses = Business::latest()->get();
         //Selected business id
         $selected_business_id = $data->business->id;
@@ -123,10 +127,33 @@ class DailyIncomeController extends Controller
             $business_list .= '<option value="' . $business->id . '" ' . $selected . '>' . $business->name . '</option>';
 
         }
-        // return $business_list;
+
+        // //All investment Person
+        $personses = Person::latest()->get();
+        //Selected person id
+        $selected_person_id = $data->person_id;
+
+        // $selected_person_id = $data->person->id;
+
+
+        $person_list = '<option disabled selected>-Select-</option>';
+        foreach ( $personses as $person ) {
+            if ( $person->id === $selected_person_id ) {
+                $selected = 'selected';
+            } else {
+                $selected = '';
+            }
+
+            $person_list .= '<option value="' . $person->id . '" ' . $selected . '>' . $person->person_name . '</option>';
+
+        }
+
+
+        // return $person_list;
         return [
             'id'     => $data->id,
             'business'  => $business_list,
+            'person'  => $person_list,
             'amount' => $data->amount,
             'remark' => $data->remark,
         ];
@@ -140,6 +167,7 @@ class DailyIncomeController extends Controller
 
         DailyIncome::where('id', $request->id)->update([
             'business_id' => $request->business_id,
+            'person_id' => $request->person_id,
             'amount' => $request->amount,
             'remark' => $request->remark,
         ]);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Business;
+use App\Models\Person;
 use App\Models\DailyExpense;
 use Illuminate\Http\Request;
 
@@ -81,13 +82,16 @@ class DailyExpenseController extends Controller
         $this->validate($request, [
             'business_id' => 'required',
             'amount' => 'required',
-            'remark' => 'required'
+            'remark' => 'required',
+            'date' => 'required'
         ]);
 
         DailyExpense::create([
             'business_id' => $request->business_id,
+            'person_id' => $request->person_id,
             'amount' => $request->amount,
             'remark' => $request->remark,
+            'date' => $request->date,
         ]);
 
         $notification = [
@@ -105,7 +109,7 @@ class DailyExpenseController extends Controller
         $data = DailyExpense::findOrFail($id);
 
 
-        // //All investment
+        // //All investment Business
         $businesses = Business::latest()->get();
         //Selected business id
         $selected_business_id = $data->business->id;
@@ -122,13 +126,37 @@ class DailyExpenseController extends Controller
             $business_list .= '<option value="' . $business->id . '" ' . $selected . '>' . $business->name . '</option>';
 
         }
-        // return $business_list;
+
+        // //All investment Person
+        $personses = Person::latest()->get();
+        //Selected person id
+        $selected_person_id = $data->person_id;
+
+        // $selected_person_id = $data->person->id;
+
+
+        $person_list = '<option disabled selected>-Select-</option>';
+        foreach ( $personses as $person ) {
+            if ( $person->id === $selected_person_id ) {
+                $selected = 'selected';
+            } else {
+                $selected = '';
+            }
+
+            $person_list .= '<option value="' . $person->id . '" ' . $selected . '>' . $person->person_name . '</option>';
+
+        }
+
+
+        // return $person_list;
         return [
             'id'     => $data->id,
             'business'  => $business_list,
+            'person'  => $person_list,
             'amount' => $data->amount,
             'remark' => $data->remark,
         ];
+
 
     }
 
@@ -139,6 +167,7 @@ class DailyExpenseController extends Controller
 
         DailyExpense::where('id', $request->id)->update([
             'business_id' => $request->business_id,
+            'person_id' => $request->person_id,
             'amount' => $request->amount,
             'remark' => $request->remark,
         ]);

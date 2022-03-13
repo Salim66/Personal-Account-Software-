@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-main-investment/{id}', [MainInvestmentController::class, 'investmentEdit'])->name('investment.edit');
     Route::post('/update-main-investment', [MainInvestmentController::class, 'investmentUpdate'])->name('investment.update');
     Route::post('/delete-main-investment', [MainInvestmentController::class, 'investmentDelete'])->name('investment.delete');
+    Route::get('/business/person/ajax/{business_id}', [MainInvestmentController::class, 'getPersonName']);
 
     // Daily Expense All Routes
     Route::get('/add-dailey-expense', [DailyExpenseController::class, 'addDailyExpensePage'])->name('add.daily.expense');

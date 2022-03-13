@@ -47,6 +47,12 @@
                                 </select>
                            </div>
                            <div class="form-group">
+                                <label>Select Person Name</label>
+                                <select name="person_id" class="form-control js-example-disabled-results" style="width: 100%;">
+
+                                </select>
+                            </div>
+                           <div class="form-group">
                                <h5>Amount <span class="text-danger">*</span></h5>
                                <div class="controls">
                                    <input type="text" name="amount" class="form-control" placeholder="Amount" required data-validation-required-message="This field is required">
@@ -58,6 +64,12 @@
                                    <input type="text" name="remark" class="form-control" placeholder="Remark" required data-validation-required-message="This field is required">
                                </div>
                            </div>
+                           <div class="form-group">
+                            <h5>Date <span class="text-danger">*</span></h5>
+                            <div class="controls">
+                                <input type="date" name="date" class="form-control" placeholder="Date" required data-validation-required-message="This field is required">
+                            </div>
+                        </div>
 
                        </div>
                      </div>
@@ -189,6 +201,12 @@
                     </div>
 
                     <div class="form-group">
+                        <select name="person_id" class="form-control d_income_person_name">
+
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="">Amount</label>
                         <input type="number" name="amount" class="form-control d_income_amount">
                     </div>
@@ -209,6 +227,33 @@
     </div>
   </div>
 <!-- /.modal -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        // alert();
+        // person name find
+        $('select[name="business_id"]').on('change', function(){
+            var business_id = $(this).val();
+
+            // alert(business_id);
+            if(business_id) {
+                $.ajax({
+                    url: "{{  url('/business/person/ajax') }}/"+business_id,
+                    type:"GET",
+                    dataType:"json",
+                    success:function(data) {
+                        var d =$('select[name="person_id"]').empty();
+                            $.each(data, function(key, value){
+                                $('select[name="person_id"]').append('<option value="'+ value.id +'">' + value.person_name + '</option>');
+                            });
+                    },
+                });
+            } else {
+                alert('danger');
+            }
+        });
+
+  });
+</script>
 
 @endsection
 

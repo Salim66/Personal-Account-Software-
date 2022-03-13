@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Business;
 use App\Models\Investment;
+use App\Models\Person;
 use Illuminate\Http\Request;
 
 class MainInvestmentController extends Controller
@@ -75,19 +76,30 @@ class MainInvestmentController extends Controller
     }
 
     /**
+     * Get Person by ajax request
+     */
+    public function getPersonName($business_id){
+        $data = Person::where('business_id', $business_id)->orderBy('person_name', 'ASC')->get();
+        return json_encode($data);
+    }
+
+    /**
      * Store Investment name
      */
     public function investmentStore(Request $request){
         $this->validate($request, [
             'business_id' => 'required',
             'amount' => 'required',
-            'remark' => 'required'
+            'remark' => 'required',
+            'date' => 'required'
         ]);
 
         Investment::create([
             'business_id' => $request->business_id,
+            'person_id' => $request->person_id,
             'amount' => $request->amount,
             'remark' => $request->remark,
+            'date' => $request->date,
         ]);
 
         $notification = [
@@ -105,7 +117,7 @@ class MainInvestmentController extends Controller
         $data = Investment::findOrFail($id);
 
 
-        // //All investment
+        // //All investment Business
         $businesses = Business::latest()->get();
         //Selected business id
         $selected_business_id = $data->business->id;
@@ -122,10 +134,32 @@ class MainInvestmentController extends Controller
             $business_list .= '<option value="' . $business->id . '" ' . $selected . '>' . $business->name . '</option>';
 
         }
-        // return $business_list;
+
+        // //All investment Person
+        $personses = Person::latest()->get();
+        //Selected person id
+        $selected_person_id = $data->person_id;
+        // $selected_person_id = $data->person->id;
+
+
+        $person_list = '<option disabled selected>-Select-</option>';
+        foreach ( $personses as $person ) {
+            if ( $person->id === $selected_person_id ) {
+                $selected = 'selected';
+            } else {
+                $selected = '';
+            }
+
+            $person_list .= '<option value="' . $person->id . '" ' . $selected . '>' . $person->person_name . '</option>';
+
+        }
+
+
+        // return $person_list;
         return [
             'id'     => $data->id,
             'business'  => $business_list,
+            'person'  => $person_list,
             'amount' => $data->amount,
             'remark' => $data->remark,
         ];
@@ -141,6 +175,7 @@ class MainInvestmentController extends Controller
 
         Investment::where('id', $request->id)->update([
             'business_id' => $request->business_id,
+            'person_id' => $request->person_id,
             'amount' => $request->amount,
             'remark' => $request->remark,
         ]);

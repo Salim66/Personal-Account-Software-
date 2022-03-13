@@ -253,8 +253,8 @@ function investment_load_data( from_date = '', to_date = '', business_id = '' ) 
                 name: 'business.name'
             },
             {
-                data: 'created_at',
-                name: 'created_at',
+                data: 'date',
+                name: 'date',
                 render: function (data, type, full, meta) {
                     let date = new Date(data);
                     return date.toLocaleDateString();
@@ -316,8 +316,8 @@ function daily_expense_load_data( from_date = '', to_date = '', business_id = ''
                 name: 'business.name'
             },
             {
-                data: 'created_at',
-                name: 'created_at',
+                data: 'date',
+                name: 'date',
                 render: function (data, type, full, meta) {
                     let date = new Date(data);
                     return date.toLocaleDateString();
@@ -378,8 +378,8 @@ function daily_income_load_data( from_date = '', to_date = '', business_id = '' 
                 name: 'business.name'
             },
             {
-                data: 'created_at',
-                name: 'created_at',
+                data: 'date',
+                name: 'date',
                 render: function (data, type, full, meta) {
                     let date = new Date(data);
                     return date.toLocaleDateString();
@@ -498,6 +498,7 @@ $(document).on('click', '.edit_investment_data', function(e){
             // console.log(data.business);
 
             $('.e_investment_name').html(data.business);
+            $('.e_investment_person_name').html(data.person);
             $('.e_investment_remark').val(data.remark);
             $('.e_investment_amount').val(data.amount);
             $('.e_investment_id').val(data.id);
@@ -522,6 +523,7 @@ $(document).on('click', '.edit_daily_expense_data', function(e){
             // console.log(data.business);
 
             $('.d_expense_name').html(data.business);
+            $('.d_expense_person_name').html(data.person);
             $('.d_expense_remark').val(data.remark);
             $('.d_expense_amount').val(data.amount);
             $('.d_expense_id').val(data.id);
@@ -546,6 +548,7 @@ $(document).on('click', '.edit_daily_income_data', function(e){
             // console.log(data.business);
 
             $('.d_income_name').html(data.business);
+            $('.d_income_person_name').html(data.person);
             $('.d_income_remark').val(data.remark);
             $('.d_income_amount').val(data.amount);
             $('.d_income_id').val(data.id);

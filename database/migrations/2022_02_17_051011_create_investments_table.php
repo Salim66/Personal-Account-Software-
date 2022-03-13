@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('investments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('business_id');
+            $table->unsignedBigInteger('person_id')->nullable();
             $table->string('amount');
             $table->string('remark');
+            $table->string('date')->nullable();
             $table->timestamps();
         });
     }
