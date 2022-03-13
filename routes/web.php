@@ -5,6 +5,7 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\DailyExpenseController;
 use App\Http\Controllers\DailyIncomeController;
 use App\Http\Controllers\MainInvestmentController;
+use App\Http\Controllers\PersonController;
 use App\Models\DailyExpense;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-business-name/{id}', [BusinessController::class, 'businessEdit'])->name('business.edit');
     Route::post('/update-business-name/{id}', [BusinessController::class, 'businessUpdate'])->name('business.update');
     Route::get('/delete-business-name/{id}', [BusinessController::class, 'businessDelete'])->name('business.delete');
+
+    // Person All Routes
+    Route::get('/add-person-name', [PersonController::class, 'addPersonNamePage'])->name('add.person.name');
+    Route::post('/store-person-name', [PersonController::class, 'personStore'])->name('person.store');
+    Route::get('/edit-person-name/{id}', [PersonController::class, 'personEdit'])->name('person.edit');
+    Route::post('/update-person-name/{id}', [PersonController::class, 'personUpdate'])->name('person.update');
+    Route::get('/delete-person-name/{id}', [PersonController::class, 'personDelete'])->name('person.delete');
 
     // Main Investment All Routes
     Route::get('/add-main-investment', [MainInvestmentController::class, 'addMainInvestmentPage'])->name('add.main.investment');

@@ -69,6 +69,12 @@
             </a>
         </li>
 
+        <li class="{{ ($route == 'add.person.name') ? 'active' : '' }}">
+            <a style="margin-left: 10px; font-size: 16px;" href="{{ route('add.person.name') }}">
+                <i class='fa-solid fa-person' style="font-size: 22px;"></i>
+              <span style="margin-left: 5px">Add Person Name</span>
+            </a>
+        </li>
 
 
       </ul>
