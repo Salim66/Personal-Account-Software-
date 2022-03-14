@@ -48,7 +48,7 @@
                            </div>
                            <div class="form-group">
                                 <label>Select Person Name</label>
-                                <select name="person_id" class="form-control js-example-disabled-results" style="width: 100%;">
+                                <select name="person_name" class="form-control js-example-disabled-results" style="width: 100%;">
 
                                 </select>
                            </div>
@@ -115,6 +115,14 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
+                                <label>Select Person Name</label>
+                                <select name="person_name" id="person_name" class="form-control js-example-disabled-results" style="width: 100%;">
+
+                                </select>
+                           </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label>Form Date:</label>
 
                                 <div class="input-group date">
@@ -154,6 +162,7 @@
                           <tr>
                               <th>#</th>
                               <th>Business Name</th>
+                              <th>Person Name</th>
                               <th>Date</th>
                               <th>Remark</th>
                               <th>Amount</th>
@@ -164,7 +173,7 @@
 
                       <tfoot>
 						<tr>
-                            <th rowspan="1" colspan="5" style="text-align: right; font-weight: bold;">Total Amount</th>
+                            <th rowspan="1" colspan="6" style="text-align: right; font-weight: bold;">Total Amount</th>
                             <th rowspan="1" colspan="1" style="text-align: left; font-weight: bold;" class="total_investment"></th>
                         </tr>
 					  </tfoot>
@@ -201,7 +210,7 @@
                     </div>
 
                     <div class="form-group">
-                        <select name="person_id" class="form-control e_investment_person_name">
+                        <select name="person_name" class="form-control e_investment_person_name">
 
                         </select>
                     </div>
@@ -241,9 +250,9 @@
                     type:"GET",
                     dataType:"json",
                     success:function(data) {
-                        var d =$('select[name="person_id"]').empty();
+                        var d =$('select[name="person_name"]').empty();
                             $.each(data, function(key, value){
-                                $('select[name="person_id"]').append('<option value="'+ value.id +'">' + value.person_name + '</option>');
+                                $('select[name="person_name"]').append('<option value="'+ value.person_name +'">' + value.person_name + '</option>');
                             });
                     },
                 });

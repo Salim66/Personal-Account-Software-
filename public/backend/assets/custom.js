@@ -225,7 +225,7 @@ $disabledResults.select2();
 
 ////////////////// Mina Investment Data Load By Yajra Table ///////////////////
 investment_load_data();
-function investment_load_data( from_date = '', to_date = '', business_id = '' ) {
+function investment_load_data( from_date = '', to_date = '', business_id = '', person_name = '' ) {
     // alert(business_id);
     $('#investment').DataTable({
         processing: true,
@@ -241,7 +241,7 @@ function investment_load_data( from_date = '', to_date = '', business_id = '' ) 
         ],
         ajax: {
             url: '/add-main-investment',
-            data: {from_date:from_date, to_date:to_date, business_id:business_id}
+            data: {from_date:from_date, to_date:to_date, business_id:business_id, person_name:person_name}
         },
         columns: [
             {
@@ -251,6 +251,10 @@ function investment_load_data( from_date = '', to_date = '', business_id = '' ) 
             {
                 data: 'business.name',
                 name: 'business.name'
+            },
+            {
+                data: 'person_name',
+                name: 'person_name'
             },
             {
                 data: 'date',
@@ -419,8 +423,21 @@ $('#filter').click(function(e){
     let from_date = moment($('#from_data').val()).format('YYYY-MM-DD');
     let to_date =  moment($('#to_data').val()).format('YYYY-MM-DD');
     let business_id = $('#business_id').val();
+    let person_name = $('#person_name').val();
     // alert(business_id);
     // alert(from_date + ' ' + to_date);
+
+    if( person_name != null && person_name != ''){
+
+        $('#investment').DataTable().destroy();
+        $('#daily_expense').DataTable().destroy();
+        $('#daily_income').DataTable().destroy();
+        investment_load_data(from_date, to_date, business_id, person_name);
+        daily_expense_load_data(from_date, to_date, business_id);
+        daily_income_load_data(from_date, to_date, business_id);
+
+        return false;
+    }
 
     if( business_id != null && business_id != ''){
 

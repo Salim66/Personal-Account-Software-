@@ -7,7 +7,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="user-profile treeview">
           <a href="index.html">
-			<img src="{{ asset('backend/') }}/images/avatar/7.jpg" alt="user">
+			<img src="{{ Auth::user()->profile_photo_url }}" alt="user">
               <span>
 				<span class="d-block font-weight-600 font-size-16">{{ Auth::user()->name }}</span>
 				<span class="email-id">{{ Auth::user()->email }}</span>
