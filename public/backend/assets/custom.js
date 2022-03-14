@@ -292,7 +292,7 @@ function investment_load_data( from_date = '', to_date = '', business_id = '', p
 
 //////////////////Daily Expense Data Load By Yajra Table ///////////////////
 daily_expense_load_data();
-function daily_expense_load_data( from_date = '', to_date = '', business_id = '' ) {
+function daily_expense_load_data( from_date = '', to_date = '', business_id = '', person_name = '') {
     // alert(business_id);
     $('#daily_expense').DataTable({
         processing: true,
@@ -308,7 +308,7 @@ function daily_expense_load_data( from_date = '', to_date = '', business_id = ''
         ],
         ajax: {
             url: '/add-dailey-expense',
-            data: {from_date:from_date, to_date:to_date, business_id:business_id}
+            data: {from_date:from_date, to_date:to_date, business_id:business_id, person_name:person_name}
         },
         columns: [
             {
@@ -318,6 +318,10 @@ function daily_expense_load_data( from_date = '', to_date = '', business_id = ''
             {
                 data: 'business.name',
                 name: 'business.name'
+            },
+            {
+                data: 'person_name',
+                name: 'person_name'
             },
             {
                 data: 'date',
@@ -354,7 +358,7 @@ function daily_expense_load_data( from_date = '', to_date = '', business_id = ''
 
 //////////////////Daily Income Data Load By Yajra Table ///////////////////
 daily_income_load_data();
-function daily_income_load_data( from_date = '', to_date = '', business_id = '' ) {
+function daily_income_load_data( from_date = '', to_date = '', business_id = '', person_name = '' ) {
     // alert(business_id);
     $('#daily_income').DataTable({
         processing: true,
@@ -370,7 +374,7 @@ function daily_income_load_data( from_date = '', to_date = '', business_id = '' 
         ],
         ajax: {
             url: '/add-dailey-income',
-            data: {from_date:from_date, to_date:to_date, business_id:business_id}
+            data: {from_date:from_date, to_date:to_date, business_id:business_id, person_name:person_name}
         },
         columns: [
             {
@@ -380,6 +384,10 @@ function daily_income_load_data( from_date = '', to_date = '', business_id = '' 
             {
                 data: 'business.name',
                 name: 'business.name'
+            },
+            {
+                data: 'person_name',
+                name: 'person_name'
             },
             {
                 data: 'date',
@@ -433,8 +441,8 @@ $('#filter').click(function(e){
         $('#daily_expense').DataTable().destroy();
         $('#daily_income').DataTable().destroy();
         investment_load_data(from_date, to_date, business_id, person_name);
-        daily_expense_load_data(from_date, to_date, business_id);
-        daily_income_load_data(from_date, to_date, business_id);
+        daily_expense_load_data(from_date, to_date, business_id, person_name);
+        daily_income_load_data(from_date, to_date, business_id, person_name);
 
         return false;
     }

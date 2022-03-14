@@ -16,6 +16,19 @@ class DailyExpenseController extends Controller
 
         if( request() -> ajax() ){
 
+             // when two date is empty and  business id and person name has this purson is run
+             if( !empty( $request->person_name ) && $request->from_date == "Invalid date" ){
+
+                return datatables()->of( DailyExpense::with( 'business' )->where('business_id', $request->business_id)->where('person_name', $request->person_name)->latest()->get() )->addColumn( 'action', function ( $data ) {
+                    $output = '<a title="Edit" edit_id="' . $data['id'] . '" href="#" class="btn btn-sm btn-outline-info edit_daily_expense_data" style="margin-right: 10px;"><i class="fa fa-edit text-white"></i></a>';
+
+                    $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="daily_expense_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
+                    $data['id'] . '"><button type="submit" class="btn btn-sm ml-1 btn-outline-danger" ><i class="fa fa-trash"></i></button></form>';
+                    return $output;
+                } )->rawColumns( ['action'] )->make( true );
+
+            }
+
             // when two date is empty and  business id has this purson is run
             if( !empty( $request->business_id ) && $request->from_date == "Invalid date" ){
 
@@ -32,7 +45,7 @@ class DailyExpenseController extends Controller
             // when two date has and  business id is empty this purson is run
              if ( !empty( $request->from_date ) && !empty( $request->to_date && empty( $request->business_id ) ) ) {
 
-                return datatables()->of( DailyExpense::with( 'business' )->whereBetween('created_at', [$request->from_date, $request->to_date])->latest()->get() )->addColumn( 'action', function ( $data ) {
+                return datatables()->of( DailyExpense::with( 'business' )->whereBetween('date', [$request->from_date, $request->to_date])->latest()->get() )->addColumn( 'action', function ( $data ) {
                     $output = '<a title="Edit" edit_id="' . $data['id'] . '" href="#" class="btn btn-sm btn-outline-info edit_daily_expense_data" style="margin-right: 10px;"><i class="fa fa-edit text-white"></i></a>';
 
                     $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="daily_expense_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
@@ -43,9 +56,22 @@ class DailyExpenseController extends Controller
             }
 
             // when all data has
+            if( !empty( $request->from_date ) && !empty( $request->to_date ) && !empty( $request->business_id ) && !empty( $request->person_name ) ){
+
+                return datatables()->of( DailyExpense::with( 'business' )->whereBetween('date', [$request->from_date, $request->to_date])->where('business_id', $request->business_id)->where('person_name', $request->person_name)->latest()->get() )->addColumn( 'action', function ( $data ) {
+                        $output = '<a title="Edit" edit_id="' . $data['id'] . '" href="#" class="btn btn-sm btn-outline-info edit_daily_expense_data" style="margin-right: 10px;"><i class="fa fa-edit text-white"></i></a>';
+
+                        $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="daily_expense_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
+                        $data['id'] . '"><button type="submit" class="btn btn-sm ml-1 btn-outline-danger" ><i class="fa fa-trash"></i></button></form>';
+                        return $output;
+                } )->rawColumns( ['action'] )->make( true );
+
+            }
+
+            // when all data has only person name is empty
             if( !empty( $request->from_date ) && !empty( $request->to_date ) && !empty( $request->business_id ) ){
 
-                return datatables()->of( DailyExpense::with( 'business' )->whereBetween('created_at', [$request->from_date, $request->to_date])->where('business_id', $request->business_id)->latest()->get() )->addColumn( 'action', function ( $data ) {
+                return datatables()->of( DailyExpense::with( 'business' )->whereBetween('date', [$request->from_date, $request->to_date])->where('business_id', $request->business_id)->latest()->get() )->addColumn( 'action', function ( $data ) {
                         $output = '<a title="Edit" edit_id="' . $data['id'] . '" href="#" class="btn btn-sm btn-outline-info edit_daily_expense_data" style="margin-right: 10px;"><i class="fa fa-edit text-white"></i></a>';
 
                         $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="daily_expense_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
@@ -88,7 +114,7 @@ class DailyExpenseController extends Controller
 
         DailyExpense::create([
             'business_id' => $request->business_id,
-            'person_id' => $request->person_id,
+            'person_name' => $request->person_name,
             'amount' => $request->amount,
             'remark' => $request->remark,
             'date' => $request->date,
@@ -127,23 +153,42 @@ class DailyExpenseController extends Controller
 
         }
 
+        // // //All investment Person
+        // $personses = Person::latest()->get();
+        // //Selected person id
+        // $selected_person_id = $data->person_id;
+
+        // // $selected_person_id = $data->person->id;
+
+
+        // $person_list = '<option disabled selected>-Select-</option>';
+        // foreach ( $personses as $person ) {
+        //     if ( $person->id === $selected_person_id ) {
+        //         $selected = 'selected';
+        //     } else {
+        //         $selected = '';
+        //     }
+
+        //     $person_list .= '<option value="' . $person->id . '" ' . $selected . '>' . $person->person_name . '</option>';
+
+        // }
+
         // //All investment Person
         $personses = Person::latest()->get();
         //Selected person id
-        $selected_person_id = $data->person_id;
-
+        $selected_person_name = $data->person_name;
         // $selected_person_id = $data->person->id;
 
 
         $person_list = '<option disabled selected>-Select-</option>';
         foreach ( $personses as $person ) {
-            if ( $person->id === $selected_person_id ) {
+            if ( $person->person_name == $selected_person_name ) {
                 $selected = 'selected';
             } else {
                 $selected = '';
             }
 
-            $person_list .= '<option value="' . $person->id . '" ' . $selected . '>' . $person->person_name . '</option>';
+            $person_list .= '<option value="' . $person->person_name . '" ' . $selected . '>' . $person->person_name . '</option>';
 
         }
 
@@ -167,7 +212,7 @@ class DailyExpenseController extends Controller
 
         DailyExpense::where('id', $request->id)->update([
             'business_id' => $request->business_id,
-            'person_id' => $request->person_id,
+            'person_name' => $request->person_name,
             'amount' => $request->amount,
             'remark' => $request->remark,
         ]);

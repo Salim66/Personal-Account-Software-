@@ -45,7 +45,7 @@ class MainInvestmentController extends Controller
             // when two date has and  business id is empty this purson is run
              if ( !empty( $request->from_date ) && !empty( $request->to_date && empty( $request->business_id ) ) ) {
 
-                return datatables()->of( Investment::with( 'business' )->whereBetween('created_at', [$request->from_date, $request->to_date])->latest()->get() )->addColumn( 'action', function ( $data ) {
+                return datatables()->of( Investment::with( 'business' )->whereBetween('date', [$request->from_date, $request->to_date])->latest()->get() )->addColumn( 'action', function ( $data ) {
                     $output = '<a title="Edit" edit_id="' . $data['id'] . '" href="#" class="btn btn-sm btn-outline-info edit_investment_data" style="margin-right: 10px;"><i class="fa fa-edit text-white"></i></a>';
 
                     $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="investment_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
@@ -58,7 +58,7 @@ class MainInvestmentController extends Controller
             // when all data has
             if( !empty( $request->from_date ) && !empty( $request->to_date ) && !empty( $request->business_id ) && !empty( $request->person_name ) ){
 
-                return datatables()->of( Investment::with( 'business' )->whereBetween('created_at', [$request->from_date, $request->to_date])->where('business_id', $request->business_id)->where('person_name', $request->person_name)->latest()->get() )->addColumn( 'action', function ( $data ) {
+                return datatables()->of( Investment::with( 'business' )->whereBetween('date', [$request->from_date, $request->to_date])->where('business_id', $request->business_id)->where('person_name', $request->person_name)->latest()->get() )->addColumn( 'action', function ( $data ) {
                         $output = '<a title="Edit" edit_id="' . $data['id'] . '" href="#" class="btn btn-sm btn-outline-info edit_investment_data" style="margin-right: 10px;"><i class="fa fa-edit text-white"></i></a>';
 
                         $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="investment_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
@@ -71,7 +71,7 @@ class MainInvestmentController extends Controller
             // when all data has only person name is empty
             if( !empty( $request->from_date ) && !empty( $request->to_date ) && !empty( $request->business_id ) ){
 
-                return datatables()->of( Investment::with( 'business' )->whereBetween('created_at', [$request->from_date, $request->to_date])->where('business_id', $request->business_id)->latest()->get() )->addColumn( 'action', function ( $data ) {
+                return datatables()->of( Investment::with( 'business' )->whereBetween('date', [$request->from_date, $request->to_date])->where('business_id', $request->business_id)->latest()->get() )->addColumn( 'action', function ( $data ) {
                         $output = '<a title="Edit" edit_id="' . $data['id'] . '" href="#" class="btn btn-sm btn-outline-info edit_investment_data" style="margin-right: 10px;"><i class="fa fa-edit text-white"></i></a>';
 
                         $output .= '<form style="display: inline;" action="#" method="POST" delete_id = "'.$data['id'].'" class="investment_delete_form"><input type="hidden" name="id" class="delete_in" value="' .
